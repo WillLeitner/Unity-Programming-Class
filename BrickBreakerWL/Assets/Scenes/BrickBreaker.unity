@@ -581,6 +581,8 @@ MonoBehaviour:
   Speed: 10
   RightDirection: 275
   LeftDirection: 276
+  PaddleObject: {fileID: 1771865410}
+  PaddleTransform: {fileID: 1771865413}
 --- !u!212 &1771865412
 SpriteRenderer:
   m_ObjectHideFlags: 0

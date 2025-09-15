@@ -30,7 +30,5 @@ public class PaddleBehavior : MonoBehaviour
         }
 
         transform.position += new Vector3(movement * Time.deltaTime, 0.0f, 0.0f);
-
-        Debug.Log(PaddleTransform.position.x);
     }
 }
