@@ -14,7 +14,7 @@ public class BrickBehavior : MonoBehaviour
 
     }
     
-    void OnCollisionEnter2d(Collision2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ball"))
         {

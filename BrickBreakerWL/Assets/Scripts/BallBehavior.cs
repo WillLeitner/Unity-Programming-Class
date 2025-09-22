@@ -20,7 +20,7 @@ public class BallBehavior : MonoBehaviour
         _rb.AddForce(direction * _launchForce, ForceMode2D.Impulse);
     }
 
-    void OnCollisionEnter2d(Collision2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Paddle"))
         {
