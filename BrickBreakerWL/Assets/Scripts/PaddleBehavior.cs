@@ -2,33 +2,32 @@ using UnityEngine;
 
 public class PaddleBehavior : MonoBehaviour
 {
- public float Speed = 5.0f;
+    [Range(1.0f, 10.0f)] public float Speed = 5.0f;
+    [SerializeField] private KeyCode _rightDirection;
+    [SerializeField] private KeyCode _leftDirection;
 
-    public KeyCode RightDirection;
-    public KeyCode LeftDirection;
-    public GameObject PaddleObject;
-    public Transform PaddleTransform; 
-    void Start()
+    private float _direction;
+
+    private Rigidbody2D _rb;
+
+    private void Start()
     {
-        PaddleObject = GameObject.Find("Paddle");
+        _rb = GetComponent<Rigidbody2D>();
+    }
+
+    void FixedUpdate()
+    {
+        _rb.linearVelocity = _direction * new Vector2(Speed, 0.0f);
     }
 
     void Update()
     {
-        float movement = 0.0f;
-        
-        PaddleTransform = PaddleObject.GetComponent<Transform>();
+        _direction = 0.0f;
 
-        if (Input.GetKey(RightDirection) && ((PaddleTransform.position.x) <= 9.47))
-        {
-            movement += Speed;
-        }
+        if (Input.GetKey(_rightDirection))
+            _direction += 1.0f;
 
-        if (Input.GetKey(LeftDirection) && ((PaddleTransform.position.x) >= -9.47))
-        {
-            movement -= Speed;
-        }
-
-        transform.position += new Vector3(movement * Time.deltaTime, 0.0f, 0.0f);
+        if (Input.GetKey(_leftDirection))
+            _direction -= 1.0f;
     }
 }

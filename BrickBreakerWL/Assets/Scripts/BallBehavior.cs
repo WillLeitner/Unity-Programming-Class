@@ -2,22 +2,52 @@ using UnityEngine;
 
 public class BallBehavior : MonoBehaviour
 {
-    public float Speed = 5.0f;
+    [SerializeField] private float _launchForce = 5.0f;
 
-    private int _xDirection;
-    private int _yDirection;
+    [SerializeField] private float _paddleInfluence = 0.4f;
+
+    private Rigidbody2D _rb;
 
     void Start()
     {
-        // variable = if statement ? what it equals if it's true : what it equals if it's false
-        
-        _xDirection = Random.value >= 0.5f ? 1 : -1;
+        _rb = GetComponent<Rigidbody2D>();
 
-        _yDirection = Random.value >= 0.5f ? 1 : -1;
+        Vector2 direction = new Vector2(
+            GetNonZeroRandomFloat(),
+            GetNonZeroRandomFloat()
+        ).normalized;
+
+        _rb.AddForce(direction * _launchForce, ForceMode2D.Impulse);
+    }
+
+    void OnCollisionEnter2d(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Paddle"))
+        {
+            if (!Mathf.Approximately(other.rigidbody.linearVelocity.x, 0.0f))
+            {
+                Vector2 direction = _rb.linearVelocity * (1 - _paddleInfluence)
+                                    + other.rigidbody.linearVelocity * _paddleInfluence;
+
+                _rb.linearVelocity = _rb.linearVelocity.magnitude * direction.normalized;
+            }
+        }
+    }
+
+    float GetNonZeroRandomFloat(float min = -1.0f, float max = 1.0f)
+    {
+        float num;
+
+        do
+        {
+            num = Random.Range(min, max);
+        } while (Mathf.Approximately(num, 0.0f));
+
+        return num;
     }
 
     void Update()
     {
-        transform.position += new Vector3(Speed * _xDirection, Speed * _yDirection, 0.0f) * Time.deltaTime;
+        
     }
 }
