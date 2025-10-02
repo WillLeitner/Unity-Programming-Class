@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PaddleBehavior : MonoBehaviour
@@ -17,7 +18,7 @@ public class PaddleBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-        _rb.linearVelocity = _direction * new Vector2(Speed, 0.0f);
+        _rb.linearVelocityX = _direction * Speed;
     }
 
     void Update()
