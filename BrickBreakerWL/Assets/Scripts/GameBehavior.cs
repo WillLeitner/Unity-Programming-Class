@@ -6,6 +6,9 @@ public class GameBehavior : MonoBehaviour
     public static GameBehavior Instance;
     [SerializeField] private TMP_Text _scoreUI;
     private int _score = 0;
+    public Utilities.GameState State;
+    [SerializeField] private KeyCode _pauseButton;
+    [SerializeField] private TMP_Text _messagesUI;
 
     public int Score
     {
@@ -33,8 +36,18 @@ public class GameBehavior : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(_pauseButton))
+        {
+            State = State == Utilities.GameState.Play ? Utilities.GameState.Pause : Utilities.GameState.Play;
+
+            _messagesUI.enabled = !_messagesUI.enabled;
+        }
+    }
     void Start()
     {
         Score = 0;
+        _messagesUI.enabled = false;
     }
 }

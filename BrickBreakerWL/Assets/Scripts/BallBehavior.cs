@@ -8,13 +8,28 @@ public class BallBehavior : MonoBehaviour
 
     private Rigidbody2D _rb;
 
+    [SerializeField] private AudioSource _sfx;
+
+    [SerializeField] private AudioClip _scoreSFX;
+    [SerializeField] private AudioClip _paddleSFX;
+    [SerializeField] private AudioClip _wallSFX;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
 
+        ResetBall();
+    }
+
+    void ResetBall()
+    {
+        _rb.linearVelocity = Vector2.zero;
+
+        transform.position = Vector3.zero;
+
         Vector2 direction = new Vector2(
-            GetNonZeroRandomFloat(),
-            GetNonZeroRandomFloat()
+            Utilities.GetNonZeroRandomFloat(),
+            Utilities.GetNonZeroRandomFloat()
         ).normalized;
 
         _rb.AddForce(direction * _launchForce, ForceMode2D.Impulse);
@@ -31,23 +46,26 @@ public class BallBehavior : MonoBehaviour
 
                 _rb.linearVelocity = _rb.linearVelocity.magnitude * direction.normalized;
             }
+            _sfx.resource = _paddleSFX;
         }
+        else if (other.gameObject.CompareTag("Brick"))
+        {
+            _sfx.resource = _scoreSFX;
+        }
+        else
+        {
+            _sfx.resource = _wallSFX;
+        }
+        _sfx.Play();
     }
 
-    float GetNonZeroRandomFloat(float min = -1.0f, float max = 1.0f)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        float num;
-
-        do
-        {
-            num = Random.Range(min, max);
-        } while (Mathf.Approximately(num, 0.0f));
-
-        return num;
+        ResetBall();
     }
 
     void Update()
     {
-        
+        _rb.simulated = GameBehavior.Instance.State != Utilities.GameState.Pause;
     }
 }
